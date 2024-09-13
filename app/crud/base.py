@@ -1,3 +1,5 @@
+from typing import Generic, TypeVar
+
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -7,12 +9,12 @@ from app.core.db import Base
 from app.models import User
 
 
-class CRUDBase[
-    ModelType: Base,
-    CreateSchemaType: BaseModel,
-    UpdateSchemaType: BaseModel | None
-]:
+ModelType = TypeVar('ModelType', bound=Base)
+CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)
+UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseModel)
 
+
+class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(
             self,
             model: ModelType
