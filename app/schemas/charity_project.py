@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Extra, Field, NonNegativeInt, PositiveInt, validator
+from pydantic import BaseModel, Extra, Field, NonNegativeInt, PositiveInt
 
 
 class CharityProjectBase(BaseModel):

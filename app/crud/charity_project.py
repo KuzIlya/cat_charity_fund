@@ -3,7 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
 from app.models.charity_project import CharityProject
-from app.schemas.charity_project import CharityProjectCreate, CharityProjectUpdate
+from app.schemas.charity_project import (
+    CharityProjectCreate, CharityProjectUpdate
+)
 
 
 class CRUDCharityProject(CRUDBase[
@@ -23,7 +25,7 @@ class CRUDCharityProject(CRUDBase[
         )
         db_project_id = db_project_id.scalars().first()
         return db_project_id
-    
+
     async def get_charity_project_by_id(
         self,
         project_id: int,

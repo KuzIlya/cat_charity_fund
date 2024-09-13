@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.sqlite import INTEGER
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class DateMixin:
