@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "qrkot"
+version = "1.0"
+description = "Благотворительный фонд для котиков"
+authors = ["KuzIlya <KuznetsovIlyaDM@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.114.1"
+SQLAlchemy = "^2.0.34"
+fastapi-users-db-sqlalchemy = "^6.0.1"
+fastapi-users = "^13.0.0"
+pydantic = "^2.9.1"
+aiosqlite = "^0.20.0"
+uvicorn = "^0.30.6"
+pytest = "^8.3.3"
+pytest-asyncio = "^0.24.0"
+mixer = "^7.2.2"
+alembic = "^1.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
