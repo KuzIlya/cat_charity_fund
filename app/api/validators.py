@@ -22,14 +22,23 @@ async def check_name_duplicate(
         )
 
 
-def check_charity_project_invested_sum(
-    project: CharityProject,
-    new_amount: int
-) -> None:
-    if project.full_amount > new_amount:
+async def full_amount_lower_then_invested(
+        project_id: int,
+        amount: int,
+        session: AsyncSession
+) -> CharityProject:
+
+    charity_project = await charity_project_crud.get_charity_project_by_id(
+        project_id, session
+    )
+
+    if charity_project.invested_amount > amount:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='Нельзя установить сумму, ниже уже вложенной!'
+            detail=(
+                "Нельзя установить значение full_amount "
+                "меньше уже вложенной суммы."
+            )
         )
 
 
@@ -58,11 +67,19 @@ async def check_charity_project_already_invested(
         )
 
 
-def check_charity_project_closed(
-    charity_project: CharityProject
-) -> None:
-    if charity_project.fully_invested:
+async def ensure_project_open(
+        project_id: int,
+        session: AsyncSession
+) -> CharityProject:
+
+    charity_project = await charity_project_crud.get_charity_project_by_id(
+        project_id, session
+    )
+
+    if charity_project.close_date:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail='Закрытый проект нельзя редактировать!'
+            detail="Закрытый проект нельзя редактировать!"
         )
+
+    return charity_project

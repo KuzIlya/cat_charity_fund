@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.validators import (check_charity_project_already_invested,
-                                check_charity_project_closed,
+                                ensure_project_open,
                                 check_charity_project_exists,
-                                check_charity_project_invested_sum,
+                                full_amount_lower_then_invested,
                                 check_name_duplicate)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
@@ -74,6 +74,7 @@ async def delete_charity_project(
 @router.patch(
     '/{project_id}',
     response_model=CharityProjectDB,
+    response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
@@ -85,11 +86,18 @@ async def update_charity_project(
     project = await check_charity_project_exists(
         project_id, session
     )
-    check_charity_project_closed(project)
+    await ensure_project_open(project_id, session)
     if obj_in.name:
         await check_name_duplicate(obj_in.name, session)
     if obj_in.full_amount:
-        check_charity_project_invested_sum(project, obj_in.full_amount)
+        await full_amount_lower_then_invested(
+            project_id, obj_in.full_amount, session
+        )
+
+    if project.invested_amount >= project.full_amount:
+        project.fully_invested = True
+        await session.commit()
+        await session.refresh(project)
 
     charity_project = await charity_project_crud.update(
         session, project, obj_in
