@@ -29,8 +29,12 @@ async def invest_money(
     obj_in: Union[CharityProject, Donation],
     obj_model: Union[CharityProject, Donation],
 ) -> Union[CharityProject, Donation]:
-    free_amount_in = obj_in.full_amount - obj_in.invested_amount
-    free_amount_in_model = obj_model.full_amount - obj_model.invested_amount
+    """Инвестирование денег из входящего объекта в модель"""
+
+    free_amount_in: int = obj_in.full_amount - obj_in.invested_amount
+    free_amount_in_model: int = (
+        obj_model.full_amount - obj_model.invested_amount
+    )
 
     if free_amount_in > free_amount_in_model:
         obj_in.invested_amount += free_amount_in_model
@@ -52,6 +56,8 @@ async def investing(
     model_add: Union[CharityProject, Donation],
     session: AsyncSession,
 ) -> Union[CharityProject, Donation]:
+    """Процесс инвестирования из входящего объекта в модель"""
+
     objects_model = await get_not_full_invested_objects(model_add, session)
 
     for model in objects_model:
