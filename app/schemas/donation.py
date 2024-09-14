@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 
 from pydantic import BaseModel, Field, NonNegativeInt, PositiveInt
@@ -5,7 +6,7 @@ from pydantic import BaseModel, Field, NonNegativeInt, PositiveInt
 
 class DonationBase(BaseModel):
     full_amount: PositiveInt
-    comment: str | None = Field(None)
+    comment: Optional[str] = Field(None)
 
 
 class DonationCreate(DonationBase):
@@ -24,4 +25,4 @@ class DonationDB(DonationResponse):
     user_id: int
     invested_amount: NonNegativeInt
     fully_invested: bool
-    close_date: datetime | None = Field(None)
+    close_date: Optional[datetime] = Field(None)

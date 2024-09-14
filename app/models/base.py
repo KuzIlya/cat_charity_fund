@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy.dialects.sqlite import INTEGER
 from sqlalchemy.orm import Mapped, mapped_column
@@ -6,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 class DateMixin:
     create_date: Mapped[datetime] = mapped_column(default=datetime.now)
-    close_date: Mapped[datetime | None] = mapped_column(default=None)
+    close_date: Mapped[Optional[datetime]] = mapped_column(default=None)
 
 
 class InvestmentMixin:
