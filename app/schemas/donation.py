@@ -5,15 +5,19 @@ from pydantic import BaseModel, Field, NonNegativeInt, PositiveInt
 
 
 class DonationBase(BaseModel):
+    """Базовая схема модели пожертвования"""
+
     full_amount: PositiveInt
     comment: Optional[str] = Field(None)
 
 
 class DonationCreate(DonationBase):
-    pass
+    """Схема модели пожертвования на создание"""
 
 
-class DonationResponse(DonationBase):
+class DonationRead(DonationBase):
+    """Схема модели пожертвования на чтение"""
+
     id: int
     create_date: datetime
 
@@ -21,7 +25,9 @@ class DonationResponse(DonationBase):
         from_attributes = True
 
 
-class DonationDB(DonationResponse):
+class DonationDB(DonationRead):
+    """Схема модели пожертвования из бд"""
+
     user_id: int
     invested_amount: NonNegativeInt
     fully_invested: bool

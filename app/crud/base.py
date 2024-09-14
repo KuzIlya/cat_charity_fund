@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, Optional, List
+from typing import Generic, TypeVar, Optional
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -36,7 +36,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def get_multi(
             self,
             session: AsyncSession,
-    ) -> List[ModelType]:
+    ) -> list[ModelType]:
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
 

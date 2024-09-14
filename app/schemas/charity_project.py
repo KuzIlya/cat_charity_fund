@@ -5,15 +5,35 @@ from pydantic import (
     BaseModel, Extra, Field, NonNegativeInt, PositiveInt, validator
 )
 
+from app.constants import MAX_LENGTH_FOR_NAME, MIN_LENGTH_FOR_NAME
+from app.exceptions.charity_project import (
+    BlankProjectDescription, BlankProjectName
+)
+
 
 class CharityProjectBase(BaseModel):
-    name: str = Field(..., min_length=1, max_length=100)
-    description: str = Field(..., min_length=1)
+    """Базовая схема модели проекта"""
+
+    name: str = Field(
+        ...,
+        min_length=MIN_LENGTH_FOR_NAME,
+        max_length=MAX_LENGTH_FOR_NAME
+    )
+    description: str = Field(
+        ...,
+        min_length=MIN_LENGTH_FOR_NAME
+    )
     full_amount: PositiveInt
 
 
 class CharityProjectUpdate(BaseModel):
-    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    """Схема модели проекта на обновление"""
+
+    name: Optional[str] = Field(
+        None,
+        min_length=MIN_LENGTH_FOR_NAME,
+        max_length=MAX_LENGTH_FOR_NAME
+    )
     description: Optional[str] = Field(None)
     full_amount: Optional[PositiveInt] = Field(None)
 
@@ -24,21 +44,23 @@ class CharityProjectUpdate(BaseModel):
     @validator('name')
     def name_cannot_be_empty(cls, name: Optional[str]):
         if name is not None and not name.strip():
-            raise ValueError('Название проекта не может быть пустым!')
+            raise BlankProjectName()
         return name
 
     @validator('description')
     def description_cannot_be_empty(cls, description: Optional[str]):
         if description is not None and not description.strip():
-            raise ValueError('Описание проекта не может быть пустым!')
+            raise BlankProjectDescription()
         return description
 
 
 class CharityProjectCreate(CharityProjectBase):
-    pass
+    """Схема модели проекта на создание"""
 
 
 class CharityProjectDB(CharityProjectBase):
+    """Схема модели проекта из бд"""
+
     id: int
     invested_amount: NonNegativeInt
     fully_invested: bool
