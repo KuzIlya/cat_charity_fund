@@ -26,9 +26,7 @@ async def get_all_donations(
     Возвращает список всех пожертвований.
     """
 
-    all_donations = await donation_crud.get_multi(session)
-
-    return all_donations
+    return await donation_crud.get_multi(session)
 
 
 @router.post(

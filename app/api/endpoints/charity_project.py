@@ -28,8 +28,7 @@ async def get_all_charity_projects(
 ):
     """Возвращает список всех проектов."""
 
-    all_projects = await charity_project_crud.get_multi(session)
-    return all_projects
+    return await charity_project_crud.get_multi(session)
 
 
 @router.post(
@@ -69,11 +68,9 @@ async def delete_charity_project(
         project_id, session
     )
     await check_charity_project_already_invested(project)
-    removed_project = await charity_project_crud.remove(
+    return await charity_project_crud.remove(
         session, project
     )
-
-    return removed_project
 
 
 @router.patch(
@@ -108,8 +105,6 @@ async def update_charity_project(
         await session.commit()
         await session.refresh(project)
 
-    charity_project = await charity_project_crud.update(
+    return await charity_project_crud.update(
         session, project, obj_in
     )
-
-    return charity_project
